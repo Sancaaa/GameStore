@@ -62,7 +62,7 @@ Sistem memiliki dua jenis pengguna:
 ---
 
 ## 📐 Diagram UML
-![UML Diagram](https://github.com/Sancaaa/GameStore/assets/Screenshot_2025-05-12_224100.png?raw=true)
+![UML Diagram](https://github.com/Sancaaa/GameStore/blob/main/assets/Screenshot_2025-05-12_224100.png?raw=true)
 *Ketuk untuk memperbesar gambar.*
 
 
