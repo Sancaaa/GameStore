@@ -49,7 +49,7 @@ Sistem memiliki dua jenis pengguna:
 <a name="struktur-class-oop"></a>
 ## 🗂️ Struktur Class OOP
 
-### 🎬 `Main`
+### 🎬 [`Main`](https://github.com/Sancaaa/GameStore/src/Main.java)
 Titik masuk utama aplikasi, menjalankan alur utama program dan mengatur flow antar komponen.
 
 
@@ -108,4 +108,5 @@ Bertanggung jawab terhadap proses penyimpanan dan pembacaan data dari file (`.cs
     - Membeli game berbayar atau langganan GamePass
     - Mengakses game yang telah dibeli atau tersedia lewat GamePass aktif
 4. Semua transaksi **dicatat dan disimpan ke dalam file**
+intinya contoh https://github.com/Sands225/PBO_Tugas_1/
 ---
