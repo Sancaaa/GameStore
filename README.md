@@ -7,6 +7,16 @@ Sistem memiliki dua jenis pengguna:
 - 🧑‍💻 **Customer**: dapat membeli game berbayar, mengakses game gratis, dan berlangganan GamePass untuk mendapatkan akses ke kumpulan game selama periode tertentu
 ---
 
+## 🙋‍♂️ Kontributor
+| Nama                         | NIM        | Kelas   |
+|------------------------------|------------|---------|
+| Anak Agung Narendera Sancaya | 2405551038 | PBO (F) |
+| I Gusti Ngurah Agung Vimala Pratista Putra | 2405551083 | PBO (F) |
+| I Gusti Bagus Rama Kusuma Vijaya | 2405551085 | PBO (F) |
+| I Wayan Juana Satya Adinata | 2405551091 | PBO (F) |
+| Dewa Made Pandu Diotama | 2405551098 | PBO (F) |
+---
+
 ## 🎯 Fitur Utama
 ### 🔐 Login & Autentikasi
 - Sistem autentikasi berbasis **username dan password**
@@ -52,7 +62,9 @@ Sistem memiliki dua jenis pengguna:
 ---
 
 ## 📐 Diagram UML
-_Gambar_
+![UML Diagram](https://github.com/Sancaaa/GameStore/assets/Screenshot_2025-05-12_224100.png?raw=true)
+*Ketuk untuk memperbesar gambar.*
+
 
 <a name="struktur-class-oop"></a>
 ## 🗂️ Struktur Class OOP
@@ -103,9 +115,8 @@ Menangani proses pembayaran dan validasi saat transaksi dilakukan.
 
 ### 🧾 `DataManager`
 Bertanggung jawab terhadap proses penyimpanan dan pembacaan data dari file (`.csv`) menggunakan File I/O.
-    
+
 ---
-___
 
 ## 🖥️   Alur Penggunaan
 
