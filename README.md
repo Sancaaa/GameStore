@@ -37,28 +37,6 @@ Sistem memiliki dua jenis pengguna:
 ### 🧾 Manajemen Data
 - Data user, game, GamePass, dan transaksi disimpan dalam file `.csv`
 - Menggunakan **File I/O** untuk membaca dan menulis data secara persisten
-
-### 🧱 Struktur OOP
-- Sistem terdiri dari **[13 class](#struktur-class-oop)**
-- Menerapkan prinsip **Object-Oriented Programming (OOP)**:
-    - Inheritance
-    - Abstraksi (`abstract`)
-    - Polymorphism
-    - Interface
-    - Inner class
-    - Exception handling (try-catch-finally, custom exception)
----
-
-## 🔧 Teknologi dan Teknik
-
-| Komponen           | Detail                                                              |
-|--------------------|---------------------------------------------------------------------|
-| 🧠 **Bahasa**       | Java                                                                |
-| 📁 **Penyimpanan**  | File `.csv`                                                         |
-| 💬 **Input**        | `Scanner` (Command-Line Interface)                                  |
-| 🧱 **OOP**          | 10+ class, inheritance, interface, abstraksi, polymorphism          |
-| 🚨 **Error Handling** | `try-catch-finally`, `throws`, dan custom exception              |
-| 📦 **Java Collection** | `ArrayList`, `HashMap`, `LinkedList`                             |
 ---
 
 ## 📐 Diagram UML
@@ -66,6 +44,7 @@ Sistem memiliki dua jenis pengguna:
 
 *Ketuk untuk memperbesar gambar.*
 
+---
 
 <a name="struktur-class-oop"></a>
 ## 🗂️ Struktur Class OOP
@@ -129,3 +108,4 @@ Bertanggung jawab terhadap proses penyimpanan dan pembacaan data dari file (`.cs
     - Membeli game berbayar atau langganan GamePass
     - Mengakses game yang telah dibeli atau tersedia lewat GamePass aktif
 4. Semua transaksi **dicatat dan disimpan ke dalam file**
+---
