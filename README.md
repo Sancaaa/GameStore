@@ -48,53 +48,44 @@ Sistem memiliki dua jenis pengguna:
 
 <a name="struktur-class-oop"></a>
 ## 🗂️ Struktur Class OOP
-
 ### 🎬 [`Main`](https://github.com/Sancaaa/GameStore/blob/main/src/Main.java)
 Titik masuk utama aplikasi, menjalankan alur utama program dan mengatur flow antar komponen.
 
-
-### 🏪 `GameStore`
+### 🏪 [`GameStore`](https://github.com/Sancaaa/GameStore/blob/main/src/GameStore.java)
 Mengelola data game, user, dan transaksi. Bertindak sebagai pusat logika aplikasi.
 
-
-### 👤 `User`
+### 👤 [`User`](https://github.com/Sancaaa/GameStore/blob/main/src/User.java)
 Kelas induk dari `Admin` dan `Customer`, menyimpan informasi dasar pengguna seperti username dan password.
 
-#### 🛠️ `Admin`
+#### 🛠️ [`Admin`](https://github.com/Sancaaa/GameStore/blob/main/src/Admin.java)
 Memiliki hak akses untuk menambahkan dan menghapus game serta GamePass dari sistem.
 
-#### 🧑‍💻 `Customer`
+#### 🧑‍💻 [`Customer`](https://github.com/Sancaaa/GameStore/blob/main/src/Customer.java)
 Dapat membeli game, melihat katalog, dan berlangganan GamePass.
 
-### 🔐 `Authenticator`
+### 🔐 [`Authenticator`](https://github.com/Sancaaa/GameStore/blob/main/src/Authenticator.java)
 Bertugas menangani proses login dan verifikasi user berdasarkan username dan password.
 
-
-### 🎮 `Game`
+### 🎮 [`Game`](https://github.com/Sancaaa/GameStore/blob/main/src/Game.java)
 Mewakili entitas game di dalam sistem, baik yang gratis maupun berbayar.
 
-
-### 🎫 `GamePass`
+### 🎫 [`GamePass`](https://github.com/Sancaaa/GameStore/blob/main/src/GamePass.java)
 Berisi kumpulan game yang bisa diakses oleh pengguna dengan sistem langganan.
 
-
-### 💳 `Transaction`
+### 💳 [`Transaction`](https://github.com/Sancaaa/GameStore/blob/main/src/Transaction.java)
 Mewakili proses transaksi pembelian game atau langganan GamePass, disimpan ke file melalui File I/O.
 
 #### 📄 `TransactionDetail` *(inner class)*
 Menyimpan informasi spesifik per transaksi, seperti item yang dibeli, harga, dan tanggal.
 
-
-### 📋 `MenuManager`
+### 📋 [`MenuManager`](https://github.com/Sancaaa/GameStore/blob/main/src/MenuManager.java)
 Mengatur dan menampilkan menu interaktif kepada pengguna (Admin/Customer).
 
-
-### 💰 `PaymentManager`
+### 💰 [`PaymentManager`](https://github.com/Sancaaa/GameStore/blob/main/src/PaymentManager.java)
 Menangani proses pembayaran dan validasi saat transaksi dilakukan.
 
-
-### 🧾 `DataManager`
-Bertanggung jawab terhadap proses penyimpanan dan pembacaan data dari file (`.csv`) menggunakan File I/O.
+### 🧾 [`DataManager`](https://github.com/Sancaaa/GameStore/blob/main/src/DataManager.java)
+Bertanggung jawab terhadap proses penyimpanan dan pembacaan data dari file (.csv) menggunakan File I/O.
 
 ---
 
