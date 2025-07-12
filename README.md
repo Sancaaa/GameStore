@@ -103,7 +103,9 @@ Menangani proses pembayaran dan validasi saat transaksi dilakukan.
 
 ### 🧾 `DataManager`
 Bertanggung jawab terhadap proses penyimpanan dan pembacaan data dari file (`.csv`) menggunakan File I/O.
-
+    
+---
+___
 
 ## 🖥️   Alur Penggunaan
 
