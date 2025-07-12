@@ -49,7 +49,7 @@ Sistem memiliki dua jenis pengguna:
 <a name="struktur-class-oop"></a>
 ## 🗂️ Struktur Class OOP
 
-### 🎬 [`Main`](https://github.com/Sancaaa/GameStore/src/Main.java)
+### 🎬 [`Main`](https://github.com/Sancaaa/GameStore/blob/main/src/Main.java)
 Titik masuk utama aplikasi, menjalankan alur utama program dan mengatur flow antar komponen.
 
 
