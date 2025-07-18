@@ -21,9 +21,9 @@ public class GameStore {
 
     private void loadInitialData() {
         games = dataManager.loadGames();
-        gamePass = dataManager.loadGamePass(); // ✅ ganti dari loadGamePasses()
+        gamePass = dataManager.loadGamePass(games);
         if (gamePass == null) {
-            gamePass = new GamePass(0.0); // fallback jika belum ada data
+            gamePass = new GamePass("GP001", "Default GamePass", 0.0); // jika belum ada data
         }
 
         transactions = new HashSet<>(dataManager.loadTransactions());
@@ -37,22 +37,22 @@ public class GameStore {
     }
 
     public void run() {
-        Scanner scanner = new Scanner(System.in);
+        // Scanner scanner = new Scanner(System.in);
         while (true) {
-            menuManager.showMainMenu();
-            int choice = scanner.nextInt();
-            scanner.nextLine();
+            // menuManager.showMainMenu();
+            menuManager.showMainMenu(this);
+            // scanner.nextLine();
 
-            switch (choice) {
-                case 1 -> login(scanner);
-                case 2 -> menuManager.showRegistrationMenu(scanner, this);
-                case 3 -> {
-                    System.out.println("Terima kasih telah menggunakan layanan kami!");
-                    saveAllData();
-                    return;
-                }
-                default -> System.out.println("Pilihan tidak valid!");
-            }
+            // switch (choice) {
+            //     case 1 -> menuManager.showLoginMenu(scanner, this);
+            //     case 2 -> menuManager.showRegistrationMenu(scanner, this);
+            //     case 3 -> {
+            //         System.out.println("Terima kasih telah menggunakan layanan kami!");
+            //         saveAllData();
+            //         return;
+            //     }
+            //     default -> System.out.println("Pilihan tidak valid!");
+            // }
         }
     }
 
@@ -60,50 +60,28 @@ public class GameStore {
         return dataManager.registerCustomer(username, password);
     }
 
-    private void login(Scanner scanner) {
-        System.out.print("Username: ");
-        String username = scanner.nextLine();
-        System.out.print("Password: ");
-        String password = scanner.nextLine();
-
-        try {
-            currentUser = authenticator.authenticate(username, password);
-            if (currentUser == null) {
-                System.out.println("Autentikasi gagal!");
-                return;
-            }
-
-            if (currentUser instanceof Admin admin) {
-                menuManager.showAdminMenu(admin, scanner, this);
-            } else if (currentUser instanceof Customer customer) {
-                menuManager.showCustomerMenu(customer, scanner, this);
-            }
-        } catch (AuthenticationException e) {
-            System.out.println("Error: " + e.getMessage());
-        }
-    }
-
     public void addGame(Game game) {
         games.add(game);
         dataManager.saveGames(games);
     }
 
-    public void removeGame(String gameId) {
-        games.removeIf(game -> game.getGameId().equals(gameId));
-        dataManager.saveGames(games);
-
-        // ✅ Hapus juga dari gamePass jika ada
+public void removeGame(String gameId) {
+    // Hapus dari games list
+    games.removeIf(game -> game.getGameId().equals(gameId));
+    
+    // Hapus dari gamePass jika ada
+    if (gamePass != null) {
         gamePass.removeGame(gameId);
         dataManager.saveGamePass(gamePass);
     }
-
-    public GamePass getGamePass() {
-        return gamePass;
-    }
+    
+    // Simpan perubahan games
+    dataManager.saveGames(games);
+}
 
     public void setGamePassPrice(double newPrice) {
-        gamePass.setPricePerMonth(newPrice); // ✅ langsung ubah harga
-        dataManager.saveGamePass(gamePass);  // ✅ simpan satu gamepass
+        gamePass.setPricePerMonth(newPrice); // langsung ubah harga
+        dataManager.saveGamePass(gamePass);  //  simpan satu gamepass
     }
 
     public void processTransaction(Transaction transaction) {
@@ -136,4 +114,34 @@ public class GameStore {
         }
         dataManager.saveUsers(allUsers);
     }
+
+        public void addGameToPass(Game game) {
+        if (gamePass != null) {
+            gamePass.addGame(game);
+            dataManager.saveGamePass(gamePass);
+        }
+    }
+    
+    public void removeGameFromPass(String gameId) {
+        if (gamePass != null) {
+            gamePass.removeGame(gameId);
+            dataManager.saveGamePass(gamePass);
+        }
+    }
+    
+    public void updateGamePassPrice(double newPrice) {
+        if (gamePass != null) {
+            gamePass.setPricePerMonth(newPrice);
+            dataManager.saveGamePass(gamePass);
+        }
+    }
+
+    public GamePass getGamePass() {
+        return gamePass;
+    }
+
+    public Authenticator getAuthenticator() {
+        return this.authenticator;
+    }
+
 }

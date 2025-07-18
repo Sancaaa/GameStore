@@ -156,20 +156,23 @@ public GamePass loadGamePass(List<Game> allGames) {
         String line = reader.readLine();
         if (line != null) {
             String[] parts = line.split(",");
-            double price = Double.parseDouble(parts[0]); // Harga di index 0
-            List<Game> includedGames = new ArrayList<>();
-
-            // Game IDs mulai dari index 1
-            for (int i = 1; i < parts.length; i++) {
-                String gameId = parts[i];
-                for (Game game : allGames) {
-                    if (game.getGameId().equals(gameId)) {
-                        includedGames.add(game);
-                        break;
+            if (parts.length >= 1) {
+                double price = Double.parseDouble(parts[0]);
+                String name = (parts.length > 1) ? parts[1] : "GamePass";
+                
+                List<Game> includedGames = new ArrayList<>();
+                for (int i = 2; i < parts.length; i++) {
+                    String gameId = parts[i];
+                    for (Game game : allGames) {
+                        if (game.getGameId().equals(gameId)) {
+                            includedGames.add(game);
+                            break;
+                        }
                     }
                 }
+                GamePass gamePass = new GamePass("GP001", name, price, includedGames);
+                return gamePass;
             }
-            return new GamePass(price, includedGames);
         }
     } catch (IOException e) {
         System.out.println("Belum ada GamePass. Membuat file kosong...");
@@ -186,9 +189,10 @@ public GamePass loadGamePass(List<Game> allGames) {
     //menyimpan data gamePasses ke csv
 public void saveGamePass(GamePass pass) {
     try (PrintWriter writer = new PrintWriter(new FileWriter(GAMEPASSES_FILE))) {
-        // Format: harga,gameId1,gameId2,...
         StringBuilder sb = new StringBuilder();
-        sb.append(pass.getPricePerMonth()); // Harga di awal
+        sb.append(pass.getPricePerMonth())
+          .append(",")
+          .append(pass.getName());
         
         for (Game game : pass.getGamesIncluded()) {
             sb.append(",").append(game.getGameId());

@@ -2,24 +2,29 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class GamePass { 
-    // Atribut
+    private String passId;  // ✅ Tambahkan field ini
     private String name;
     private double pricePerMonth;
     private List<Game> gamesIncluded;
 
     // Constructor
-    public GamePass(String name, double pricePerMonth) {
+    public GamePass(String passId, String name, double pricePerMonth) {
+        this.passId = passId;
         this.name = name;
         this.pricePerMonth = pricePerMonth;
         this.gamesIncluded = new ArrayList<>();
     }
+    
     // Constructor (overloaded)
-    public GamePass(double pricePerMonth, List<Game> games) {
+    public GamePass(String passId, String name, double pricePerMonth, List<Game> games) {
+        this.passId = passId;
+        this.name = name;
         this.pricePerMonth = pricePerMonth;
         this.gamesIncluded = games;
     }
 
     // Getters
+    public String getPassId() { return passId; }
     public String getName() { return name; }
     public double getPricePerMonth() { return pricePerMonth; }
     public List<Game> getGamesIncluded() { return gamesIncluded; }

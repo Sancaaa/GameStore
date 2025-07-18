@@ -18,6 +18,7 @@ public class Transaction {
         this.date = date;
         this.details = new ArrayList<>();
     }
+    
 
     // method untuk menambahkan objek detail transaksi
     public void addDetail(TransactionDetail detail) {

@@ -14,6 +14,7 @@ public class Customer extends User {
         this.balance = balance;
         this.gamePassActive = false;
         this.ownedGames = new ArrayList<>();
+        this.activeGamePass = null;
     }
 
     // Getters 
@@ -27,4 +28,13 @@ public class Customer extends User {
     public void setGamePassActive(boolean gamePassActive) { this.gamePassActive = gamePassActive; }
     public void addOwnedGame(Game game) { ownedGames.add(game); }
     public void setActiveGamePass(GamePass gamePass) { this.activeGamePass = gamePass; }
+
+    public boolean hasGame(Game gameToCheck) {
+        for (Game ownedGame : ownedGames) {
+            if (ownedGame.getGameId().equals(gameToCheck.getGameId())) {
+                return true;
+            }
+        }
+        return false;
+    }
 }
