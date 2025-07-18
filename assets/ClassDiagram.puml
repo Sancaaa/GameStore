@@ -1,0 +1,20 @@
+@startuml
+skinparam backgroundColor #202124
+skinparam class {
+  BackgroundColor #2a2a2a
+  BorderColor #4CAF50
+  ArrowColor #f44336
+  FontColor white
+  FontName "JetBrains Mono"
+}
+left to right direction
+
+abstract class User
+class Admin extends User
+class Customer extends User
+class Game
+class GamePass
+
+Admin --> Game : manage
+Customer --> GamePass : subscribe
+@enduml
