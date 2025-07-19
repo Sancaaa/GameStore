@@ -150,11 +150,12 @@ public class MenuManager {
             System.out.println("3. Tambah Game ke GamePass");
             System.out.println("4. Hapus Game dari GamePass");
             System.out.println("5. Update Harga GamePass");
-            System.out.println("6. Keluar");
+            System.out.println("6. Lihat List Game");
+            System.out.println("7. Keluar");
             printSeparator();
-            System.out.print("Pilih opsi (1-6): ");
+            System.out.print("Pilih opsi (1-7): ");
 
-            int choice = readIntInRange(1, 6, "Pilih opsi (1-6): ");
+            int choice = readIntInRange(1, 7, "Pilih opsi (1-7): ");
 
             switch (choice) {
                 case 1:
@@ -173,6 +174,9 @@ public class MenuManager {
                     updateGamePassPriceMenu(gameStore);
                     break;
                 case 6:
+                    showGameCatalog(gameStore.getGamesCatalog(), scanner);
+                    break;
+                case 7:
                     showExitMenu();
             }
         }
