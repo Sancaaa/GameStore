@@ -97,7 +97,7 @@ public class MenuManager {
         
         System.out.println("===========================================");
         System.out.println("|          TERIMA KASIH TELAH             |");
-        System.out.println("|         MENGGUNAKAN GAMESTORE          |");
+        System.out.println("|         MENGGUNAKAN GAMESTORE           |");
         System.out.println("===========================================");
         System.out.println("Sampai jumpa lagi!");
 
