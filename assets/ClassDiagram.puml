@@ -4,12 +4,12 @@ skinparam classAttributeIconSize 0
 hide circle
 
 '--- External Classes ---
-class List
-class Map
-class Set
-class Date
-class Scanner
-class Exception
+'class List
+'class Map
+'class Set
+'class Date
+'class Scanner
+'class Exception
 
 '--- Main Classes ---
 
@@ -19,20 +19,22 @@ class Game {
     - price: double
     - isFree: boolean
     - genre: String
-    + getGameId()
-    + getTitle()
-    + getPrice()
-    + isFree()
-    + getGenre()
+    + Game(...)
+    + getGameId(): String
+    + getTitle(): String
+    + getPrice(): double
+    + isFree(): boolean
+    + getGenre(): String
 }
 
 class User {
     - username: String
     - password: String
     - role: String
-    + getUsername()
-    + getPassword()
-    + getRole()
+    + User(...)
+    + getUsername(): String
+    + getPassword(): String
+    + getRole(): String
 }
 
 class Customer {
@@ -40,19 +42,20 @@ class Customer {
     - gamePassActive: boolean
     - ownedGames: List<Game>
     - activeGamePass: GamePass
-    + getBalance()
-    + setBalance()
-    + isGamePassActive()
-    + setGamePassActive()
-    + getOwnedGames()
-    + addOwnedGame()
-    + getActiveGamePass()
-    + setActiveGamePass()
-    + hasGame()
+    + Customer(...)
+    + getBalance(): double
+    + setBalance(balance: double)
+    + isGamePassActive(): boolean
+    + setGamePassActive(active: boolean)
+    + getOwnedGames(): List<Game>
+    + addOwnedGame(game: Game)
+    + getActiveGamePass(): GamePass
+    + setActiveGamePass(gamePass: GamePass)
+    + hasGame(game: Game): boolean
 }
 
 class Admin {
-    + Admin()
+    + Admin(...)
 }
 
 class GamePass {
@@ -60,13 +63,15 @@ class GamePass {
     - name: String
     - pricePerMonth: double
     - gamesIncluded: List<Game>
-    + getPassId()
-    + getName()
-    + getPricePerMonth()
-    + getGamesIncluded()
-    + setPricePerMonth()
-    + addGame()
-    + removeGame()
+    + GamePass(...)
+    + getPassId(): String
+    + getName(): String
+    + getPricePerMonth(): double
+    + getGamesIncluded(): List<Game>
+    + setPricePerMonth(price: double)
+    + addGame(game: Game)
+    + removeGame(game: Game)
+    + removeGame(gameId: String)
 }
 
 class Transaction {
@@ -75,13 +80,14 @@ class Transaction {
     - date: Date
     - amount: double
     - details: List<TransactionDetail>
-    + addDetail()
+    + Transaction(...)
+    + addDetail(detail: TransactionDetail)
     + updateAmountFromDetails()
-    + getTransactionId()
-    + getUser()
-    + getDate()
-    + getAmount()
-    + getDetails()
+    + getTransactionId(): String
+    + getUser(): User
+    + getDate(): Date
+    + getAmount(): double
+    + getDetails(): List<TransactionDetail>
 }
 
 class TransactionDetail {
@@ -89,25 +95,35 @@ class TransactionDetail {
     - itemType: String
     - quantity: int
     - price: double
-    + getItemId()
-    + getItemType()
-    + getQuantity()
-    + getPrice()
+    + TransactionDetail(...)
+    + getItemId(): String
+    + getItemType(): String
+    + getQuantity(): int
+    + getPrice(): double
 }
 
 class Authenticator {
     - dataManager: DataManager
-    + authenticate(username, password): User throws AuthenticationException
+    + Authenticator(...)
+    + authenticate(username: String, password: String): User throws AuthenticationException
 }
 
 class AuthenticationException {
-    + AuthenticationException(message)
+    + AuthenticationException(message: String)
 }
 
 class MenuManager {
     - scanner: Scanner
-    + showLoginMenu(gameStore): User
-    '... other methods ...
+    + showMainMenu(...)
+    + showAdminMenu(...)
+    + showRegistrationMenu(...)
+    + showLoginMenu(gameStore: GameStore): User
+    + showCustomerMenu(...)
+    + showGameCatalog(...)
+    + buyGameMenu(...)
+    + subscribeGamePassMenu(...)
+    + showMyGames(...)
+    + topUpBalanceMenu(...)
 }
 
 class DataManager {
@@ -117,14 +133,20 @@ class DataManager {
     - GAMEPASSES_FILE: String
     - TRANSACTIONS_FILE: String
     - TRANSACTION_DETAILS_FILE: String
-    + loadUsers()
-    + saveUsers()
-    + loadGames()
-    + saveGames()
-    + loadGamePass()
-    + saveGamePass()
-    + loadTransactions()
-    + saveTransactions()
+    + DataManager()
+    + createDataDirectory()
+    + loadUsers(): List<User>
+    + saveUsers(...)
+    + loadGames(): List<Game>
+    + saveGames(...)
+    + loadGamePass(...): GamePass
+    + saveGamePass(...)
+    + loadTransactionDetails(): Map<String, List<TransactionDetail>>
+    + saveTransactionDetails(...)
+    + loadTransactions(): List<Transaction>
+    + saveTransactions(...)
+    + registerCustomer(...): boolean
+    + findUserByUsername(...): User
 }
 
 class GameStore {
@@ -132,15 +154,29 @@ class GameStore {
     - menuManager: MenuManager
     - dataManager: DataManager
     - paymentManager: PaymentManager
+    - currentUser: User
     - games: List<Game>
     - gamePass: GamePass
-    + getAuthenticator()
-    + getPaymentManager()
-    + getGamePass()
+    - customers: Map<String, Customer>
+    - transactions: Set<Transaction>
+    + GameStore()
+    + run()
+    + registerCustomer(...): boolean
+    + addGame(...)
+    + removeGame(...)
+    + setGamePassPrice(...)
+    + processTransaction(...)
+    + getGamesCatalog(): List<Game>
+    + getPaymentManager(): PaymentManager
+    + addGameToPass(...)
+    + removeGameFromPass(...)
+    + updateGamePassPrice(...)
+    + getGamePass(): GamePass
+    + getAuthenticator(): Authenticator
 }
 
 class PaymentManager {
-    + processPayment(): boolean
+    + processPayment(...): boolean
 }
 
 '--- Relationships ---
@@ -148,39 +184,38 @@ class PaymentManager {
 User <|-- Customer
 User <|-- Admin
 
-Transaction *-- TransactionDetail
+Transaction "1" *-- "*" TransactionDetail : contains >
 
-GameStore *-- DataManager
-GameStore *-- MenuManager
-GameStore *-- Authenticator
-GameStore *-- PaymentManager
-GameStore --> Game
-GameStore --> GamePass
-GameStore --> Customer
-GameStore --> Transaction
+GameStore "1" *-- "1" DataManager : manages >
+GameStore "1" *-- "1" MenuManager : uses >
+GameStore "1" *-- "1" Authenticator : uses >
+GameStore "1" *-- "1" PaymentManager : uses >
+GameStore "1" -- "*" Game : games >
+GameStore "1" -- "1" GamePass : gamePass >
+GameStore "1" -- "*" Customer : customers >
+GameStore "1" -- "*" Transaction : transactions >
 
-Customer --> Game
-Customer --> GamePass
+Customer "1" -- "*" Game : ownedGames >
+Customer "1" -- "1" GamePass : activeGamePass >
 
-GamePass --> Game
+GamePass "1" -- "*" Game : gamesIncluded >
 
-DataManager --> User
-DataManager --> Game
-DataManager --> GamePass
-DataManager --> Transaction
-DataManager --> TransactionDetail
+DataManager "1" -- "*" User : loads/saves >
+DataManager "1" -- "*" Game : loads/saves >
+DataManager "1" -- "1" GamePass : loads/saves >
+DataManager "1" -- "*" Transaction : loads/saves >
+DataManager "1" -- "*" TransactionDetail : loads/saves >
 
-MenuManager --> GameStore
-MenuManager --> Scanner
+MenuManager "1" -- "1" GameStore : interacts with >
+MenuManager "1" -- "1" Scanner : uses >
+MenuManager ..> AuthenticationException : catches
 
-Authenticator --> DataManager
-Authenticator --> User
-Authenticator --> AuthenticationException : throws >
+Authenticator --* DataManager : uses
+Authenticator --> AuthenticationException : throws
+Authenticator -- "*" User : authenticates >
 
-MenuManager ..> AuthenticationException : catches <
+PaymentManager "1" -- "1" Customer : processes payment >
 
 AuthenticationException --|> Exception
-
-PaymentManager --> Customer
 
 @enduml
