@@ -1,20 +1,186 @@
 @startuml
-skinparam backgroundColor #202124
-skinparam class {
-  BackgroundColor #2a2a2a
-  BorderColor #4CAF50
-  ArrowColor #f44336
-  FontColor white
-  FontName "JetBrains Mono"
+
+skinparam classAttributeIconSize 0
+hide circle
+
+'--- External Classes ---
+class List
+class Map
+class Set
+class Date
+class Scanner
+class Exception
+
+'--- Main Classes ---
+
+class Game {
+    - gameId: String
+    - title: String
+    - price: double
+    - isFree: boolean
+    - genre: String
+    + getGameId()
+    + getTitle()
+    + getPrice()
+    + isFree()
+    + getGenre()
 }
-left to right direction
 
-abstract class User
-class Admin extends User
-class Customer extends User
-class Game
-class GamePass
+class User {
+    - username: String
+    - password: String
+    - role: String
+    + getUsername()
+    + getPassword()
+    + getRole()
+}
 
-Admin --> Game : manage
-Customer --> GamePass : subscribe
+class Customer {
+    - balance: double
+    - gamePassActive: boolean
+    - ownedGames: List<Game>
+    - activeGamePass: GamePass
+    + getBalance()
+    + setBalance()
+    + isGamePassActive()
+    + setGamePassActive()
+    + getOwnedGames()
+    + addOwnedGame()
+    + getActiveGamePass()
+    + setActiveGamePass()
+    + hasGame()
+}
+
+class Admin {
+    + Admin()
+}
+
+class GamePass {
+    - passId: String
+    - name: String
+    - pricePerMonth: double
+    - gamesIncluded: List<Game>
+    + getPassId()
+    + getName()
+    + getPricePerMonth()
+    + getGamesIncluded()
+    + setPricePerMonth()
+    + addGame()
+    + removeGame()
+}
+
+class Transaction {
+    - transactionId: String
+    - user: User
+    - date: Date
+    - amount: double
+    - details: List<TransactionDetail>
+    + addDetail()
+    + updateAmountFromDetails()
+    + getTransactionId()
+    + getUser()
+    + getDate()
+    + getAmount()
+    + getDetails()
+}
+
+class TransactionDetail {
+    - itemId: String
+    - itemType: String
+    - quantity: int
+    - price: double
+    + getItemId()
+    + getItemType()
+    + getQuantity()
+    + getPrice()
+}
+
+class Authenticator {
+    - dataManager: DataManager
+    + authenticate(username, password): User throws AuthenticationException
+}
+
+class AuthenticationException {
+    + AuthenticationException(message)
+}
+
+class MenuManager {
+    - scanner: Scanner
+    + showLoginMenu(gameStore): User
+    '... other methods ...
+}
+
+class DataManager {
+    - BASE_PATH: String
+    - USERS_FILE: String
+    - GAMES_FILE: String
+    - GAMEPASSES_FILE: String
+    - TRANSACTIONS_FILE: String
+    - TRANSACTION_DETAILS_FILE: String
+    + loadUsers()
+    + saveUsers()
+    + loadGames()
+    + saveGames()
+    + loadGamePass()
+    + saveGamePass()
+    + loadTransactions()
+    + saveTransactions()
+}
+
+class GameStore {
+    - authenticator: Authenticator
+    - menuManager: MenuManager
+    - dataManager: DataManager
+    - paymentManager: PaymentManager
+    - games: List<Game>
+    - gamePass: GamePass
+    + getAuthenticator()
+    + getPaymentManager()
+    + getGamePass()
+}
+
+class PaymentManager {
+    + processPayment(): boolean
+}
+
+'--- Relationships ---
+
+User <|-- Customer
+User <|-- Admin
+
+Transaction *-- TransactionDetail
+
+GameStore *-- DataManager
+GameStore *-- MenuManager
+GameStore *-- Authenticator
+GameStore *-- PaymentManager
+GameStore --> Game
+GameStore --> GamePass
+GameStore --> Customer
+GameStore --> Transaction
+
+Customer --> Game
+Customer --> GamePass
+
+GamePass --> Game
+
+DataManager --> User
+DataManager --> Game
+DataManager --> GamePass
+DataManager --> Transaction
+DataManager --> TransactionDetail
+
+MenuManager --> GameStore
+MenuManager --> Scanner
+
+Authenticator --> DataManager
+Authenticator --> User
+Authenticator --> AuthenticationException : throws >
+
+MenuManager ..> AuthenticationException : catches <
+
+AuthenticationException --|> Exception
+
+PaymentManager --> Customer
+
 @enduml
