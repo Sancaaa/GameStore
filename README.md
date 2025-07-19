@@ -18,26 +18,48 @@ Sistem memiliki dua jenis pengguna:
 ---
 
 ## 🎯 Fitur Utama
-### 🔐 Login & Autentikasi
-- Sistem autentikasi berbasis **username dan password**
-- Terdapat dua peran pengguna: **Admin** dan **Customer**
+
+### 🔐 Register, Login & Autentikasi
+- **Sistem autentikasi terintegrasi** dengan verifikasi kredensial berbasis file
+- **Akses ke 2 role melalui login**:
+   - `Admin`: Menambahkan dan menghapus game + manajemen GamePass
+   - `Customer`: Akses transaksi + koleksi game pribadi
+- **Buat `Customer` baru dengan Register**
 
 ### 🎮 Manajemen Game
-- Game dibagi menjadi dua jenis: **Free** dan **Paid**
-- Admin dapat mengimplementasikan konsep **CRUD** pada game dalam sistem
+- **Klasifikasi game**:
+   - Free: Akses instan tanpa pembayaran
+   - Paid: Wajib pembelian/license
+- **Operasi `Admin`** 
+   - Tambah/hapus game
+- **Operasi `Customer`**
+  - Menambahkan game Free & membeli game Paid
+
 
 ### 💼 Langganan GamePass
-- GamePass adalah **paket langganan** berisi kumpulan game
-- Dapat diakses oleh pengguna selama **masa berlangganan aktif**
+   - Admin: Ubah komposisi/harga GamePass
+   - Customer: Berlangganan 1 bulan via saldo
 
-### 💳 Transaksi
-- Customer dapat membeli **game secara langsung** atau **berlangganan GamePass** 
-- Semua transaksi **disimpan dan dapat ditinjau kembali**
+### 💳 Sistem Transaksi
+   - Pembelian game individual
+   - Berlangganan GamePass bulanan
+   - Tercatat: item, harga, waktu, user
 
-### 🧾 Manajemen Data
-- Data user, game, GamePass, dan transaksi disimpan dalam file `.csv`
-- Menggunakan **File I/O** untuk membaca dan menulis data secara persisten
----
+
+### 🧾 Manajemen Data Persisten
+- **Penyimpanan berbasis CSV**:
+
+  | File          | Konten                           |
+  |---------------|----------------------------------|
+  | `users.csv`   | User credentials + saldo customer |
+  | `games.csv`   | Detail game         |
+  | `gamepasses.csv` | Paket GamePass + game included   |
+  | `transactions.csv` | Transaksi customer               |
+  | `transaction_details.csv` | detail transaksi customer        |
+
+- **Auto load/save**:
+   - Data otomatis dimuat saat aplikasi start
+   - Perubahan langsung disimpan ke file
 
 ## 📐 Diagram UML
 <img src="https://github.com/Sancaaa/GameStore/blob/main/assets/ClassDiagram.png?raw=true" style="width: 100%; height: auto;" alt="UML Diagram">
