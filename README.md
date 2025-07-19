@@ -47,15 +47,17 @@ Sistem memiliki dua jenis pengguna:
 
 
 ### 🧾 Manajemen Data Persisten
-- **Penyimpanan berbasis CSV**:
+ **Penyimpanan berbasis CSV**:
 
-  | File          | Konten                           |
-  |---------------|----------------------------------|
-  | `users.csv`   | User credentials + saldo customer |
-  | `games.csv`   | Detail game         |
-  | `gamepasses.csv` | Paket GamePass + game included   |
-  | `transactions.csv` | Transaksi customer               |
-  | `transaction_details.csv` | detail transaksi customer        |
+  | File          | Konten                              |
+  |---------------|-------------------------------------|
+  | `users.csv`   | User Credentials + Balance Customer |
+  | `games.csv`   | Detail Game                         |
+  | `gamepasses.csv` | Paket GamePass + GameIncluded       |
+  | `transactions.csv` | Transaksi Customer                  |
+  | `transaction_details.csv` | Detail Transaksi Customer           |
+  | `customer_games.csv` | Relasi antar Customer dan Game      |
+  | `customer_gamepass.csv` | Relasi antar Customer dan GamePass  |
 
 - **Auto load/save**:
    - Data otomatis dimuat saat aplikasi start
