@@ -105,8 +105,6 @@ public class MenuManager {
     }
 
     public void showMainMenu(GameStore gameStore) {
-    Scanner scanner = new Scanner(System.in);
-    
     while (true) {
         clearScreen();
         printHeader("Game Store Menu");

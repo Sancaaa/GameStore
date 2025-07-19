@@ -7,7 +7,7 @@ public class GameStore {
     private PaymentManager paymentManager;
     private User currentUser;
     private List<Game> games;
-    private GamePass gamePass;  // hanya satu GamePass
+    private GamePass gamePass;  
     private Map<String, Customer> customers;
     private Set<Transaction> transactions;
 
@@ -37,22 +37,8 @@ public class GameStore {
     }
 
     public void run() {
-        // Scanner scanner = new Scanner(System.in);
         while (true) {
-            // menuManager.showMainMenu();
             menuManager.showMainMenu(this);
-            // scanner.nextLine();
-
-            // switch (choice) {
-            //     case 1 -> menuManager.showLoginMenu(scanner, this);
-            //     case 2 -> menuManager.showRegistrationMenu(scanner, this);
-            //     case 3 -> {
-            //         System.out.println("Terima kasih telah menggunakan layanan kami!");
-            //         saveAllData();
-            //         return;
-            //     }
-            //     default -> System.out.println("Pilihan tidak valid!");
-            // }
         }
     }
 

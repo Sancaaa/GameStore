@@ -441,7 +441,9 @@ public void saveGamePass(GamePass pass) {
                     //disimpan ke dalam variabel dulu karena user harus ditemukan berdasarkan username
                     String transactionId = parts[0];
                     String username = parts[1];
-                    Date date = new Date(Long.parseLong(parts[2]));
+                    double timestampValue = Double.parseDouble(parts[2]);
+                    long millis = (long) timestampValue;
+                    Date date = new Date(millis);
                     double amount = Double.parseDouble(parts[3]);
 
                     // cari user berdasarkan username
@@ -492,7 +494,7 @@ public void saveGamePass(GamePass pass) {
                     trans.getTransactionId(),
                     trans.getUser().getUsername(),
                     // ubah date dan amount jadi string
-                    String.valueOf(trans.getDate().getTime()),
+                    String.format("%d", trans.getDate().getTime()),
                     String.valueOf(trans.getAmount())
                 ));
             }
