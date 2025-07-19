@@ -11,6 +11,11 @@ public class DataManager {
     private static final String GAMEPASSES_FILE = BASE_PATH + "gamepasses.csv";
     private static final String TRANSACTIONS_FILE = BASE_PATH + "transactions.csv";
     private static final String TRANSACTION_DETAILS_FILE = BASE_PATH + "transaction_details.csv";
+    
+    // NEW: File untuk menyimpan owned games customer
+    private static final String CUSTOMER_GAMES_FILE = BASE_PATH + "customer_games.csv";
+    // NEW: File untuk menyimpan status GamePass customer
+    private static final String CUSTOMER_GAMEPASS_FILE = BASE_PATH + "customer_gamepass.csv";
 
     //constructor
     public DataManager() {
@@ -26,6 +31,7 @@ public class DataManager {
             System.err.println("Gagal membuat direktori data: " + e.getMessage());
         }
     }
+    
     // Load data users dari csv 
     public List<User> loadUsers() {
         //buat object arraylist
@@ -44,7 +50,15 @@ public class DataManager {
                         users.add(new Admin(parts[0], parts[1]));
                     } else if ("Customer".equals(parts[2])) {
                         //ubah index ke 3 (balance) jadi double  
-                        users.add(new Customer(parts[0], parts[1], Double.parseDouble(parts[3])));
+                        Customer customer = new Customer(parts[0], parts[1], Double.parseDouble(parts[3]));
+                        
+                        // LOAD OWNED GAMES untuk customer ini
+                        loadCustomerGames(customer);
+                        
+                        // LOAD GAMEPASS STATUS untuk customer ini
+                        loadCustomerGamePass(customer);
+                        
+                        users.add(customer);
                     }
                 }
             }
@@ -78,6 +92,13 @@ public class DataManager {
                         //ubah balance jadi string
                         String.valueOf(customer.getBalance())
                 ));
+                
+                // SIMPAN OWNED GAMES untuk customer ini
+                saveCustomerGames(customer);
+                
+                // SIMPAN GAMEPASS STATUS untuk customer ini
+                saveCustomerGamePass(customer);
+                
             } else {
                 writer.println(String.join(",",
                         user.getUsername(),
@@ -90,6 +111,137 @@ public class DataManager {
         } catch (IOException e) {
             System.err.println("Gagal menyimpan users: " + e.getMessage());
         }
+    }
+
+    // NEW METHOD: Load owned games untuk customer tertentu
+    private void loadCustomerGames(Customer customer) {
+        try (BufferedReader reader = new BufferedReader(new FileReader(CUSTOMER_GAMES_FILE))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                String[] parts = line.split(",");
+                if (parts.length >= 2 && parts[0].equals(customer.getUsername())) {
+                    // parts[1] adalah gameId, cari game tersebut
+                    Game game = findGameById(parts[1]);
+                    if (game != null) {
+                        customer.addOwnedGame(game);
+                    }
+                }
+            }
+        } catch (IOException e) {
+            // File belum ada, buat file kosong
+            try {
+                new File(CUSTOMER_GAMES_FILE).createNewFile();
+            } catch (IOException ee) {
+                System.err.println("Gagal membuat file customer games: " + ee.getMessage());
+            }
+        }
+    }
+
+    // NEW METHOD: Save owned games untuk customer tertentu
+    private void saveCustomerGames(Customer customer) {
+        // Pertama, hapus data lama customer ini
+        List<String> allLines = new ArrayList<>();
+        try (BufferedReader reader = new BufferedReader(new FileReader(CUSTOMER_GAMES_FILE))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                String[] parts = line.split(",");
+                // Simpan baris yang bukan milik customer ini
+                if (parts.length < 1 || !parts[0].equals(customer.getUsername())) {
+                    allLines.add(line);
+                }
+            }
+        } catch (IOException e) {
+            // File belum ada, tidak apa-apa
+        }
+
+        // Tambahkan data baru customer ini
+        for (Game game : customer.getOwnedGames()) {
+            allLines.add(customer.getUsername() + "," + game.getGameId());
+        }
+
+        // Tulis ulang file
+        try (PrintWriter writer = new PrintWriter(new FileWriter(CUSTOMER_GAMES_FILE))) {
+            for (String line : allLines) {
+                writer.println(line);
+            }
+        } catch (IOException e) {
+            System.err.println("Gagal menyimpan customer games: " + e.getMessage());
+        }
+    }
+
+    // NEW METHOD: Load GamePass status untuk customer tertentu
+    private void loadCustomerGamePass(Customer customer) {
+        try (BufferedReader reader = new BufferedReader(new FileReader(CUSTOMER_GAMEPASS_FILE))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                String[] parts = line.split(",");
+                if (parts.length >= 3 && parts[0].equals(customer.getUsername())) {
+                    boolean isActive = Boolean.parseBoolean(parts[1]);
+                    String gamePassId = parts[2];
+                    
+                    customer.setGamePassActive(isActive);
+                    if (isActive && !gamePassId.isEmpty()) {
+                        // Load GamePass berdasarkan ID
+                        GamePass gamePass = loadGamePass(loadGames());
+                        if (gamePass != null && gamePass.getPassId().equals(gamePassId)) {
+                            customer.setActiveGamePass(gamePass);
+                        }
+                    }
+                }
+            }
+        } catch (IOException e) {
+            // File belum ada, buat file kosong
+            try {
+                new File(CUSTOMER_GAMEPASS_FILE).createNewFile();
+            } catch (IOException ee) {
+                System.err.println("Gagal membuat file customer gamepass: " + ee.getMessage());
+            }
+        }
+    }
+
+    // NEW METHOD: Save GamePass status untuk customer tertentu
+    private void saveCustomerGamePass(Customer customer) {
+        // Pertama, hapus data lama customer ini
+        List<String> allLines = new ArrayList<>();
+        try (BufferedReader reader = new BufferedReader(new FileReader(CUSTOMER_GAMEPASS_FILE))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                String[] parts = line.split(",");
+                // Simpan baris yang bukan milik customer ini
+                if (parts.length < 1 || !parts[0].equals(customer.getUsername())) {
+                    allLines.add(line);
+                }
+            }
+        } catch (IOException e) {
+            // File belum ada, tidak apa-apa
+        }
+
+        // Tambahkan data baru customer ini
+        String gamePassId = "";
+        if (customer.isGamePassActive() && customer.getActiveGamePass() != null) {
+            gamePassId = customer.getActiveGamePass().getPassId();
+        }
+        allLines.add(customer.getUsername() + "," + customer.isGamePassActive() + "," + gamePassId);
+
+        // Tulis ulang file
+        try (PrintWriter writer = new PrintWriter(new FileWriter(CUSTOMER_GAMEPASS_FILE))) {
+            for (String line : allLines) {
+                writer.println(line);
+            }
+        } catch (IOException e) {
+            System.err.println("Gagal menyimpan customer gamepass: " + e.getMessage());
+        }
+    }
+
+    // HELPER METHOD: Cari game berdasarkan ID
+    private Game findGameById(String gameId) {
+        List<Game> games = loadGames();
+        for (Game game : games) {
+            if (game.getGameId().equals(gameId)) {
+                return game;
+            }
+        }
+        return null;
     }
 
     // Load data games dari csv
@@ -384,4 +536,3 @@ public void saveGamePass(GamePass pass) {
         return null;
     }
 }
-

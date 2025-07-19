@@ -57,7 +57,43 @@ public class GameStore {
     }
 
     public boolean registerCustomer(String username, String password) {
-        return dataManager.registerCustomer(username, password);
+        boolean result = dataManager.registerCustomer(username, password);
+        if (result) {
+            // Reload customers after registration
+            loadCustomersData();
+        }
+        return result;
+    }
+
+    // NEW METHOD: Save individual customer data
+    public void saveCustomerData(Customer customer) {
+        // Update the customer in our local map
+        customers.put(customer.getUsername(), customer);
+        
+        // Save all users (including the updated customer) to CSV
+        List<User> allUsers = new ArrayList<>();
+        
+        // Add all customers
+        allUsers.addAll(customers.values());
+        
+        // Add all admins
+        for (User user : dataManager.loadUsers()) {
+            if (user instanceof Admin) {
+                allUsers.add(user);
+            }
+        }
+        
+        dataManager.saveUsers(allUsers);
+    }
+
+    // NEW METHOD: Reload customers from data
+    private void loadCustomersData() {
+        customers.clear();
+        for (User user : dataManager.loadUsers()) {
+            if (user instanceof Customer) {
+                customers.put(user.getUsername(), (Customer) user);
+            }
+        }
     }
 
     public void addGame(Game game) {
@@ -87,9 +123,12 @@ public void removeGame(String gameId) {
     public void processTransaction(Transaction transaction) {
         transactions.add(transaction);
         dataManager.saveTransactions(new ArrayList<>(transactions));
+        dataManager.saveTransactionDetails(new ArrayList<>(transactions));
 
         if (transaction.getUser() instanceof Customer customer) {
             customers.put(customer.getUsername(), customer);
+            // Save customer data immediately after transaction
+            saveCustomerData(customer);
         }
     }
 
@@ -105,6 +144,7 @@ public void removeGame(String gameId) {
         dataManager.saveGames(games);
         dataManager.saveGamePass(gamePass);
         dataManager.saveTransactions(new ArrayList<>(transactions));
+        dataManager.saveTransactionDetails(new ArrayList<>(transactions));
 
         List<User> allUsers = new ArrayList<>(customers.values());
         for (User user : dataManager.loadUsers()) {

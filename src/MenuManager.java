@@ -5,7 +5,7 @@ import java.util.Scanner;
 public class MenuManager {
     private final Scanner scanner = new Scanner(System.in);
     // Helper methods for input validation
-    private int readInt(  String errorMessage) {
+    private int readInt(String errorMessage) {
         
         while (true) {
             try {
@@ -16,7 +16,7 @@ public class MenuManager {
         }
     }
 
-    private int readIntInRange(  int min, int max, String errorMessage) {
+    private int readIntInRange(int min, int max, String errorMessage) {
         while (true) {
             int value = Integer.parseInt(scanner.nextLine());
             if (value >= min && value <= max) {
@@ -26,7 +26,7 @@ public class MenuManager {
         }
     }
 
-    private double readDouble(  String errorMessage) {
+    private double readDouble(String errorMessage) {
         while (true) {
             try {
                 double value = Double.parseDouble(scanner.nextLine());
@@ -41,7 +41,7 @@ public class MenuManager {
         }
     }
 
-    private String readNonEmptyString(  String errorMessage) {
+    private String readNonEmptyString(String errorMessage) {
         while (true) {
             String input = scanner.nextLine().trim();
             if (!input.isEmpty()) {
@@ -51,7 +51,7 @@ public class MenuManager {
         }
     }
 
-    private boolean readBoolean(  String errorMessage) {
+    private boolean readBoolean(String errorMessage) {
         while (true) {
             String input = scanner.nextLine().trim().toLowerCase();
             if (input.equals("ya") || input.equals("y") || input.equals("true")) {
@@ -141,7 +141,7 @@ public class MenuManager {
         }
     }
 
-    public void showAdminMenu(Admin admin,   GameStore gameStore) {
+    public void showAdminMenu(Admin admin, GameStore gameStore) {
         while (true) {
             clearScreen();
             printHeader("Admin Menu");
@@ -150,12 +150,11 @@ public class MenuManager {
             System.out.println("3. Tambah Game ke GamePass");
             System.out.println("4. Hapus Game dari GamePass");
             System.out.println("5. Update Harga GamePass");
-            System.out.println("6. Lihat List Game");
-            System.out.println("7. Keluar");
+            System.out.println("6. Keluar");
             printSeparator();
-            System.out.print("Pilih opsi (1-7): ");
+            System.out.print("Pilih opsi (1-6): ");
 
-            int choice = readIntInRange(1, 7, "Pilih opsi (1-7): ");
+            int choice = readIntInRange(1, 6, "Pilih opsi (1-6): ");
 
             switch (choice) {
                 case 1:
@@ -174,15 +173,12 @@ public class MenuManager {
                     updateGamePassPriceMenu(gameStore);
                     break;
                 case 6:
-                    showGameCatalog(gameStore.getGamesCatalog(), scanner);
-                    break;
-                case 7:
                     showExitMenu();
             }
         }
     }
 
-    private void addGameMenu(  GameStore gameStore) {
+    private void addGameMenu(GameStore gameStore) {
         clearScreen();
         printHeader("Tambah Game Baru");
         
@@ -208,7 +204,7 @@ public class MenuManager {
         pressEnterToContinue(scanner);
     }
 
-    private void removeGameMenu(  GameStore gameStore) {
+    private void removeGameMenu(GameStore gameStore) {
         clearScreen();
         printHeader("Hapus Game");
         
@@ -224,7 +220,7 @@ public class MenuManager {
         pressEnterToContinue(scanner);
     }
 
-    private void addGameToPassMenu(  GameStore gameStore) {
+    private void addGameToPassMenu(GameStore gameStore) {
         clearScreen();
         printHeader("Tambah Game ke GamePass");
         
@@ -255,7 +251,7 @@ public class MenuManager {
         pressEnterToContinue(scanner);
     }
 
-    private void removeGameFromPassMenu(  GameStore gameStore) {
+    private void removeGameFromPassMenu(GameStore gameStore) {
         clearScreen();
         printHeader("Hapus Game dari GamePass");
         
@@ -284,7 +280,7 @@ public class MenuManager {
         pressEnterToContinue(scanner);
     }
 
-    private void updateGamePassPriceMenu(  GameStore gameStore) {
+    private void updateGamePassPriceMenu(GameStore gameStore) {
         clearScreen();
         printHeader("Update Harga GamePass");
         
@@ -304,7 +300,7 @@ public class MenuManager {
         pressEnterToContinue(scanner);
     }
 
-    public void showRegistrationMenu(  GameStore gameStore) {
+    public void showRegistrationMenu(GameStore gameStore) {
         clearScreen();
         printHeader("Registrasi");
         
@@ -322,7 +318,7 @@ public class MenuManager {
         pressEnterToContinue(scanner);
     }
 
-    public User showLoginMenu(  GameStore gameStore) {
+    public User showLoginMenu(GameStore gameStore) {
         clearScreen();
         printHeader("Login");
         
@@ -361,7 +357,7 @@ public class MenuManager {
         return null;
     }
 
-    public void showCustomerMenu(Customer customer,   GameStore gameStore) {
+    public void showCustomerMenu(Customer customer, GameStore gameStore) {
         while (true) {
             clearScreen();
             printHeader("Customer Menu - " + customer.getUsername());
@@ -392,7 +388,7 @@ public class MenuManager {
                     showMyGames(customer, scanner);
                     break;
                 case 5:
-                    topUpBalanceMenu(customer, scanner);
+                    topUpBalanceMenu(customer, gameStore);
                     break;
                 case 6:
                     showExitMenu();
@@ -422,7 +418,7 @@ public class MenuManager {
         pressEnterToContinue(scanner);
     }
 
-    private void buyGameMenu(Customer customer,   GameStore gameStore) {
+    private void buyGameMenu(Customer customer, GameStore gameStore) {
         clearScreen();
         printHeader("Beli Game");
         
@@ -444,6 +440,8 @@ public class MenuManager {
 
         if (selectedGame.isFree()) {
             customer.addOwnedGame(selectedGame);
+            // SAVE CUSTOMER DATA AFTER FREE GAME PURCHASE
+            gameStore.saveCustomerData(customer);
             System.out.println("\nGame gratis berhasil ditambahkan!");
             pressEnterToContinue(scanner);
             return;
@@ -475,6 +473,8 @@ public class MenuManager {
                     selectedGame.getPrice()
             ));
             gameStore.processTransaction(transaction);
+            // SAVE CUSTOMER DATA AFTER PURCHASE
+            gameStore.saveCustomerData(customer);
             System.out.println("\nPembelian berhasil!");
         } else {
             System.out.println("\nSaldo tidak mencukupi!");
@@ -482,7 +482,7 @@ public class MenuManager {
         pressEnterToContinue(scanner);
     }
 
-    private void subscribeGamePassMenu(Customer customer,   GameStore gameStore) {
+    private void subscribeGamePassMenu(Customer customer, GameStore gameStore) {
         clearScreen();
         printHeader("Berlangganan GamePass");
         
@@ -539,6 +539,8 @@ public class MenuManager {
                 gamePass.getPricePerMonth()
             ));
             gameStore.processTransaction(transaction);
+            // SAVE CUSTOMER DATA AFTER GAMEPASS SUBSCRIPTION
+            gameStore.saveCustomerData(customer);
             
             System.out.println("\nBerlangganan berhasil!");
         } else {
@@ -586,7 +588,7 @@ public class MenuManager {
         pressEnterToContinue(scanner);
     }
 
-    private void topUpBalanceMenu(Customer customer, Scanner scanner) {
+    private void topUpBalanceMenu(Customer customer, GameStore gameStore) {
         clearScreen();
         printHeader("Top Up Saldo");
         
@@ -595,6 +597,8 @@ public class MenuManager {
         double amount = readDouble("Jumlah harus angka positif: ");
         
         customer.setBalance(customer.getBalance() + amount);
+        // SAVE CUSTOMER DATA AFTER TOP UP
+        gameStore.saveCustomerData(customer);
         System.out.printf("\nSaldo berhasil ditambahkan! Saldo sekarang: %.2f%n", customer.getBalance());
         pressEnterToContinue(scanner);
     }
